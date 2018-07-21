@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+{% block content_row %}
+    <style type="text/css">
+
+        .viewlabel{
+            font-weight: bold;
+        }
+
+
+        input[type=checkbox] {
+            transform: scale(1.7);
+            margin: 10px;
+        }
+        input[type=radio] {
+            transform: scale(1.7);
+            margin: 10px;
+        }
+
+        .answers > div{
+            text-align: center;
+        }
+
+    </style>
+
+
+        <!-- ABOUT & UPDATES -->
+        <div class="row-fluid" id="about">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h2 class="page-title" id="scroll_up"> Veranstaltung {{ event.name }}</h2>
+                        <a href="{{ path('event') }}" class="btn btn-sm btn-default" name="_submit"><span
+                                    class="glyphicon glyphicon-backward"></span> zurück</a> <a href="{{ path
+                        ('event_edit',{event:event.id}) }}" class="btn btn-sm btn-warning"><span
+                                    class="glyphicon glyphicon-pencil"></span> bearbeiten</a> <a href="{{ path
+                        ('event_delete',{event:event.id}) }}" class="btn btn-sm btn-danger"><span
+                                    class="glyphicon glyphicon-trash"></span> löschen</a>
+                            <a href="{{ path('event_share',{event:event.id}) }}" class="btn btn-sm btn-default">
+                                <span class="glyphicon glyphicon-share-alt"></span> Telegram
+                            </a><br><br>
+                    </div>
+                </div>
+                    <div class="row voffset5">
+                        <div class="col-sm-2 viewlabel">Datum:</div>
+                        <div class="col-sm-10">{{ event.date|date('d.m.Y H:i') }}</div>
+                    </div>
+                    <div class="row voffset3">
+                        <div class="col-sm-2 viewlabel">Name:</div>
+                        <div class="col-sm-10">{{ event.name }}</div>
+                    </div>
+                    <div class="row voffset3">
+                        <div class="col-sm-2 viewlabel">Ort:</div>
+                        <div class="col-sm-10">{{ event.location }}</div>
+                    </div>
+                <div class="row voffset3">
+                    <div class="col-sm-2 viewlabel">Info:</div>
+                    <div class="col-sm-10">{{ event.info|nl2br|auto_link_text }}</div>
+                </div>                           
+                {% if event.updated is defined and event.updated.timestamp > 100 %}
+                    <br><br><small>Letzte Änderung von {{ event.updatedBy }} am {{ event.updated|date('d.m.y') }} um {{ event.updated|date('H:i') }}</small>
+                {% endif %}<br><br>
+
+                <h3 class="page-title"> Teilnahme</h3>
+                <div>
+
+
+
+
+                        <div id="myanswers">
+                            <br>
+                            <form method="post" action="{{ path('event_save',{event:event.id}) }}">
+                                <div class="row answers">
+                                    <div class="col-xs-4"><label for="aone">Dabei</label> <span class="badge">{{ voteRepo.getForEventAndVote(event,1)|length }}</span><br><input id="aone" type="radio" value="1" {{ current == 1 ? "checked" }} name="answer"/><br>
+                                    {% for userVote in voteRepo.getForEventAndVote(event,1) %}
+                                        {{ userVote.user.username }}<br>
+                                    {% endfor %}
+                                    </div>
+                                    <div class="col-xs-4"><label for="atwo">Nein</label> <span class="badge">{{ voteRepo.getForEventAndVote(event,2)|length }}</span><br><input id="atwo" type="radio" value="2" {{ current == 2 ? "checked" }} name="answer"/><br>
+                                        {% for userVote in voteRepo.getForEventAndVote(event,2) %}
+                                            {{ userVote.user.username }}<br>
+                                        {% endfor %}</div>
+                                    <div class="col-xs-4"><label for="athree">Spontan</label> <span class="badge">{{ voteRepo.getForEventAndVote(event,3)|length }}</span><br><input id="athree" type="radio" {{ current == 3 ? "checked" }} value="3" name="answer"/><br>
+                                        {% for userVote in voteRepo.getForEventAndVote(event,3) %}
+                                            {{ userVote.user.username }}<br>
+                                        {% endfor %}</div>
+                                </div>
+                                <br>
+                                <input type="submit" value="speichern" class="btn btn-primary">
+                            </form>
+                            <br><br>
+                        </div>
+
+
+
+                </div>
+
+                {% set obj = event %}
+                {% include 'comment/view.html.twig' %}
+            </div>
+        </div>
+
+{% endblock %}

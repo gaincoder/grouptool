@@ -1,0 +1,13 @@
+<h3>Kommentare</h3>
+{% if obj.comments|length == 0 %}
+    <i>-- keine Kommentare vorhanden --</i>
+{% else %}
+    {% for comment in obj.comments %}
+        {% include 'comment/comment.html.twig' %}
+    {% endfor %}
+{% endif %}
+<h4>Kommetar hinzufügen</h4>
+{{ form_start(commentform) }}
+{{ form_widget(commentform) }}
+        <button type="submit" class="btn btn-success" name="_submit">speichern</button>
+{{ form_end(commentform) }}

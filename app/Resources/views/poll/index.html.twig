@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+{% block content_row %}
+    <div class="container container-fluid" id="home">
+        <!-- HOME -->
+
+        <!-- ABOUT & UPDATES -->
+        <div class="row-fluid" id="about">
+            <div class="span12">
+                <h2 class="page-title" id="scroll_up">Umfragen</h2>
+                <a href="{{ path('poll_create') }}" class="btn btn-sm btn-success"><span class="glyphicon
+                glyphicon-plus"></span> hinzufügen</a><br><br>
+
+                <table class="table table-striped">
+                    {% for poll in polls %}
+                        <tr>
+                            <td>{% if poll.isAnsweredByUser(app.user) %}<span class="glyphicon glyphicon-ok"></span> {%  endif %}<a href="{{ path('poll_view',{poll:poll.id}) }}">{{ poll.name }}</a></td>
+                            <td>{{ poll.isOpen ? 'offen' : 'geschlossen' }}</td>
+                            <td>
+                                {% if poll.open and (poll.allowAdd or (app.user == poll.owner or is_granted('ROLE_ADMIN'))) %}
+                                    <a href="{{ path('poll_edit',{poll:poll.id}) }}" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-pencil"></span></a>
+                                {% endif %}
+                                {% if app.user == poll.owner or is_granted('ROLE_ADMIN') %}
+                                    <a href="{{ path('poll_delete',{poll:poll.id}) }}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-trash"></span></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+        </div>
+
+
+    </div>
+{% endblock %}

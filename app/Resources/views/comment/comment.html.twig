@@ -1,0 +1,15 @@
+{% if event is defined %}
+ {% set type = 'event' %}
+{% elseif poll is defined %}
+ {% set type = 'poll' %}
+{% endif %}
+<p>
+    <small style="color:#606060">{{ comment.created|date('d.m.y h:i') }}</small>
+    <strong> {{ comment.user.username }} </strong>
+    {% if comment.user == app.user or is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('comment_edit',{comment:comment.id,object:obj.id,objecttype:type}) }}" class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-pencil"></span> bearbeiten</a>
+        <a href="{{ path('comment_delete',{comment:comment.id,object:obj.id,objecttype:type}) }}"  class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span> löschen</a>
+    {% endif %}
+   <br>{{ comment.text|nl2br }}
+</p>
+<hr>

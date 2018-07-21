@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block content_row %}
+    <div class="container container-fluid" id="home">
+        <!-- HOME -->
+
+        <!-- ABOUT & UPDATES -->
+        <div class="row-fluid" id="about">
+            <div class="span12">
+                <h2 class="page-title" id="scroll_up">Löschen bestätigen</h2>
+
+                {{ type }} wirklich löschen?<br><br>
+                <a class="btn btn-default" href="javascript:history.back()">Nein, zurück</a><br><br>
+                <a class="btn btn-danger" href="{{ path(app.request.attributes.get('_route'),
+                app.request.attributes.get('_route_params')) }}/1">Ja, löschen</a>
+
+            </div>
+
+        </div>
+
+
+    </div>
+{% endblock %}

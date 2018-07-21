@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+{% block content_row %}
+    <div class="container container-fluid" id="home">
+        <!-- HOME -->
+
+        <!-- ABOUT & UPDATES -->
+        <div class="row-fluid" id="about">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h2 class="page-title" id="scroll_up"> Veranstaltung {{ event.name }}</h2>
+                        <a href="{{ path('event') }}" class="btn btn-sm btn-default" name="_submit"><span class="glyphicon glyphicon-backward"></span> zurück</a> <a href="{{ path('event_edit',{event:event.id}) }}" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-pencil"></span> bearbeiten</a> <a href="{{ path('event_delete',{event:event.id}) }}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-trash"></span> löschen</a>
+                    </div>
+                </div>
+                    <div class="row voffset5">
+                        <div class="col-sm-2 viewlabel">Datum:</div>
+                        <div class="col-sm-10">{{ event.date|date('d.m.Y H:i') }}</div>
+                    </div>
+                    <div class="row voffset3">
+                        <div class="col-sm-2 viewlabel">Name:</div>
+                        <div class="col-sm-10">{{ event.name }}</div>
+                    </div>
+                    <div class="row voffset3">
+                        <div class="col-sm-2 viewlabel">Ort:</div>
+                        <div class="col-sm-10">{{ event.location }}</div>
+                    </div>
+                <div class="row voffset3">
+                    <div class="col-sm-2 viewlabel">Info:</div>
+                    <div class="col-sm-10">{{ event.info|nl2br|auto_link_text }}</div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+{% block content_row %}
+    <div class="container container-fluid" id="home">
+        <!-- HOME -->
+
+        <!-- ABOUT & UPDATES -->
+        <div class="row-fluid" id="about">
+            {{ form_start(form) }}
+            <div class="span12">
+                <h2 class="page-title" id="scroll_up"> {{ page_title }}</h2>
+                <h3 class="page-title" id="scroll_up"> Antwortmöglichkeiten</h3>
+                <div id="answer-fields-list"
+                    data-prototype="{{ form_widget(form.answers.vars.prototype)|e }}">
+                    {% for answerField in form.answers %}
+                        <div class="elem col-sm-12">
+                            {{ form_errors(answerField) }}
+                            {{ form_widget(answerField) }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <a href="#" class="btn btn-default" id="add-another-answer"><i class="glyphicon glyphicon-plus"></i> weitere Antwortmöglichkeit</a><br><br>
+            </div>
+            <button type="submit" class="btn btn-success" name="_submit">speichern</button>
+            <a href="{{ path('poll') }}" class="btn btn-default" name="_submit">zurück</a>
+            {{ form_end(form) }}
+        </div>
+
+
+    </div>
+
+
+
+    <script type="text/javascript">
+        // keep track of how many answer fields have been rendered
+        var answerCount = '{{ form.answers|length }}';
+
+        jQuery(document).ready(function() {
+            jQuery('#add-another-answer').click(function(e) {
+                e.preventDefault();
+
+                var answerList = jQuery('#answer-fields-list');
+
+                // grab the prototype template
+                var newWidget = answerList.attr('data-prototype');
+                // replace the "__name__" used in the id and name of the prototype
+                // with a number that's unique to your answers
+                // end name attribute looks like name="contact[answers][2]"
+                newWidget = newWidget.replace(/__name__/g, answerCount);
+                answerCount++;
+
+                // create a new list element and add it to the list
+                var newDiv = jQuery('<div class="elem col-sm-12"></div>').html(newWidget);
+                newDiv.appendTo(answerList);
+                addTagFormDeleteLink(newDiv.find('div.form-group'));
+                groupInputs(newDiv.find('div.form-group'));
+            });
+        })
+
+
+
+        function addTagFormDeleteLink($tagFormLi) {
+            var $removeFormA = $('<span class="input-group-btn"><button class="btn btn-danger" href="#"><span class="glyphicon glyphicon-remove"></span></button></span>');
+            $tagFormLi.append($removeFormA);
+
+            $removeFormA.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // remove the li for the tag form
+                $tagFormLi.remove();
+            });
+        }
+
+        function groupInputs(elem){
+            elem.addClass('input-group');
+        }
+
+        jQuery(document).ready(function() {
+            // Get the ul that holds the collection of tags
+            $collectionHolder = jQuery('#answer-fields-list');
+
+            // add a delete link to all of the existing tag form li elements
+            $collectionHolder.find('input').each(function() {
+                $(this).prop('readonly',true);
+            });
+
+            // ... the rest of the block from above
+        });
+
+
+
+    </script>
+
+{% endblock %}

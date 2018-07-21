@@ -1,0 +1,27 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% block form_top %}
+    <h3>Einloggen</h3>
+    <p>Bitte geben Sie Benutzername und Passwort ein:</p>
+    {% if error %}
+        <span class="text-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+    {% endif %}
+{% endblock %}
+
+
+{% block fos_user_content %}
+    {{ include('@FOSUser/Security/login_content.html.twig') }}
+{% endblock fos_user_content %}
+
+{% block bottom %}
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3 social-login">
+            <p>... oder:</p>
+            <div class="social-login-buttons">
+                <a class="btn btn-md btn-primary btn" href="{{ path('fos_user_registration_register') }}">
+                    Jetzt registrieren!
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

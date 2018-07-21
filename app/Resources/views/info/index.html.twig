@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+{% block content_row %}
+    <div class="container container-fluid" id="home">
+        <!-- HOME -->
+
+        <!-- ABOUT & UPDATES -->
+        <div class="row-fluid" id="about">
+            <div class="span12">
+                <h2 class="page-title" id="scroll_up">Infos</h2>
+                <a href="{{ path('info_create') }}" class="btn btn-sm btn-success"><span class="glyphicon
+                glyphicon-plus"></span> hinzufügen</a><br><br>
+
+                    {% for info in infos %}
+                        <div class="well">
+                            <h3 id="{{ info.id }}">{{ info.headline }} <a href="{{ path('info_edit',{info:info.id}) }}" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-pencil"></span></a> <a href="{{ path('info_delete',{info:info.id}) }}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-trash"></span></a>
+                            <a href="{{ path('info_share',{info:info.id}) }}" class="btn btn-sm btn-default">
+                                <span class="glyphicon glyphicon-share-alt"></span> Telegram
+                            </a></td></h3>
+                        {{ info.text|nl2br|auto_link_text }}
+                            {% if info.updated is defined and info.updated.timestamp > 100 %}
+                            <br><br><small>Letzte Änderung von {{ info.updatedBy }} am {{ info.updated|date('d.m.y') }} um {{ info.updated|date('H:i') }}</small>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+               
+            </div>
+
+        </div>
+
+
+    </div>
+{% endblock %}

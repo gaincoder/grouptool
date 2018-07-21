@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+{% block head_script %}
+    {{ parent() }}
+    <script src="/src/js/jquery.swipebox.js"></script>
+    <link rel="stylesheet" href="/src/css/swipebox.css">
+{% endblock head_script %}
+{% block content_row %}
+
+
+    <div class="container container-fluid" id="home">
+        <!-- HOME -->
+
+        <!-- ABOUT & UPDATES -->
+        <div class="row-fluid" id="about">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h2 class="page-title" id="scroll_up"> {{ photoalbum.name }}</h2>
+                        <a href="{{ path('photoalbum') }}" class="btn btn-sm btn-default" name="_submit"><span
+                                    class="glyphicon glyphicon-backward"></span> zurück</a> <a href="{{ path
+                        ('photoalbum_edit',{photoalbum:photoalbum.id}) }}" class="btn btn-sm btn-warning"><span
+                                    class="glyphicon glyphicon-pencil"></span> bearbeiten</a> <a href="{{ path
+                        ('photoalbum_delete',{photoalbum:photoalbum.id}) }}" class="btn btn-sm btn-danger"><span
+                                    class="glyphicon glyphicon-trash"></span> löschen</a><br><br>
+                    </div>
+                </div>
+                <div class="row text-center text-lg-left">
+                    {% for photo in photoalbum.photos %}
+                        <div class="col-lg-3 col-md-4 col-xs-6">
+                            <a href="{{ path('photo_display',{photo:photo.id}) }}{% if photo.type == 1 %}?swipeboxvideo=1{% endif %}" class="swipebox {% if photo.type == 1 %}swipebox-video{% endif %} d-block mb-4 h-100">
+                                <img class="img-fluid img-thumbnail"  src="{{ path('photo_display',{photo:photo.id,thumb:1}) }}" alt="">
+                            </a>
+                            <br><br>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script type="text/javascript">
+        ;( function( $ ) {
+
+            $( '.swipebox' ).swipebox();
+
+        } )( jQuery );
+    </script>
+{% endblock %}
+

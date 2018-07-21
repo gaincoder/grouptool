@@ -1,0 +1,234 @@
+{% extends 'base.html.twig' %}
+{% block content_row %}
+    <style type="text/css">
+        .btn-yesno .btn{
+            color: #A0A0A0;
+        }
+        .btn-yesno .active{
+            color: #FFFFFF;
+            outline: 8px;
+        }
+        .tab-pane{
+            background-color: #FFFFFF;
+            padding:3px;
+            border-left: 1px solid #ddd;
+        }
+        .viewlabel{
+            font-weight: bold;
+        }
+        .voffset3{
+            margin-top: 5px;
+        }
+
+        .voffset5{
+            margin-top: 7px;
+        }
+
+        .nav-tabs li{
+            font-weight: bold;
+        }
+
+        input[type=checkbox] {
+            transform: scale(1.7);
+            margin: 10px;
+        }
+        input[type=radio] {
+            transform: scale(1.7);
+            margin: 10px;
+        }
+
+
+    </style>
+    <script type="text/javascript">
+        var updateAnswers = function(elem){
+            {% if  poll.open %}
+            elem=$(elem);
+            if(!elem.hasClass('active')) {
+                {% if poll.type == 0 %}
+                    onlyOne(elem);
+                {% else %}
+                    toggle(elem);
+                {% endif %}
+            }
+            {% endif %}
+        };
+
+        var onlyOne = function(elem){
+                $('#answercontainer').find('.btn-group').each(function (key, el) {
+                        setValueForGroup($(el), false);
+                    }
+                );
+                toggle(elem);
+        };
+
+        var toggle = function(elem){
+            if(elem.hasClass('no')) {
+                setValueForGroup(elem.parent(), false);
+            }else{
+                setValueForGroup(elem.parent(), true);
+            }
+        };
+
+
+        var setValueForGroup = function(group,value){
+            group.find('.off').prop("checked", false);
+            group.find('.no').removeClass('active');
+            group.find('.on').prop("checked", false);
+            group.find('.yes').removeClass('active');
+            if(value===false){
+                group.find('.no').addClass('active');
+                group.find('.off').prop("checked", true);
+            }else{
+                group.find('.yes').addClass('active');
+                group.find('.on').prop("checked", true);
+            }
+        };
+
+    </script>
+
+
+
+
+        <div class="row-fluid" id="about">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h2 class="page-title" id="scroll_up"> Umfrage: {{ poll.name }}</h2>
+                        <a href="{{ path('poll') }}" class="btn btn-sm btn-default" name="_submit">
+                            <span class="glyphicon glyphicon-backward"></span> zurück
+                        </a>
+
+                        {% if poll.open and (poll.allowAdd or (app.user == poll.owner or is_granted('ROLE_ADMIN'))) %}
+                        <a href="{{ path('poll_edit',{poll:poll.id}) }}" class="btn btn-sm btn-warning">
+                            <span class="glyphicon glyphicon-pencil"></span> bearbeiten
+                        </a>
+                        {% endif %}
+                        {% if poll.open and (app.user == poll.owner or is_granted('ROLE_ADMIN')) %}
+                            <a href="{{ path('poll_toggle_status',{poll:poll.id}) }}" class="btn btn-sm btn-primary">
+                                <span class="glyphicon glyphicon-lock"></span> beenden
+                            </a>
+                        {% endif %}
+                        {% if (not poll.open) and is_granted('ROLE_ADMIN')  %}
+                            <a href="{{ path('poll_toggle_status',{poll:poll.id}) }}" class="btn btn-sm btn-primary">
+                                <span class="glyphicon glyphicon-repeat"></span> öffnen
+                            </a>
+                        {% endif %}
+                        {% if app.user == poll.owner or is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('poll_delete',{poll:poll.id}) }}" class="btn btn-sm btn-danger">
+                                <span class="glyphicon glyphicon-trash"></span> löschen
+                            </a>
+                        {% endif %}
+                        {% if poll.open %}
+                            <a href="{{ path('poll_share',{poll:poll.id}) }}" class="btn btn-sm btn-default">
+                                <span class="glyphicon glyphicon-share-alt"></span> Telegram
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row voffset5">
+                    <div class="col-sm-2 viewlabel">Erstellt von:</div>
+                    <div class="col-sm-10">{{ poll.owner.username }}</div>
+                </div>
+                <div class="row voffset3">
+                    <div class="col-sm-2 viewlabel">Teilnahme bis:</div>
+                    <div class="col-sm-10">{{ poll.endDate|date('d.m.Y') }}</div>
+                </div>
+                <div class="row voffset3">
+                    <div class="col-sm-2 viewlabel">Typ:</div>
+                    <div class="col-sm-10">{{ poll.type ? 'Mitglieder dürfen mehere Antworten auswählen' : 'Eine Antwort pro Mitglied' }}</div>
+                </div>
+                <div class="row voffset3">
+                    <div class="col-sm-2 viewlabel">Antworten hinzufügen:</div>
+                    <div class="col-sm-10">{{ poll.allowAdd ? 'Ja' : 'Nein'}}</div>
+                </div>
+                {% if poll.updated is defined and poll.updated.timestamp > 100 %}
+                    <br><br><small>Letzte Änderung von {{ poll.updatedBy }} am {{ poll.updated|date('d.m.y') }} um {{ poll.updated|date('H:i') }}</small>
+                {% endif %}
+
+                <h3 class="page-title"> Antworten</h3>
+                <div>
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#myanswers" aria-controls="myanswers" role="tab" data-toggle="tab">Meine Antworten</a></li>
+                        <li role="presentation"><a href="#allanswers" aria-controls="allanswers" role="tab" data-toggle="tab">Alle Antworten</a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+
+                        <div role="tabpanel" class="tab-pane active" id="myanswers">
+                            <form method="post" action="{{ path('poll_save',{poll:poll.id}) }}">
+                            <div id="answercontainer">
+                                {% for answer in poll.answers %}
+                                    {% set yesno = -1  %}
+                                    {% if answer.voteForUser(app.user).vote  is defined %}
+                                        {% set yesno = answer.voteForUser(app.user).vote  %}
+                                    {% endif %}
+                                    <div class="row voffset3">
+                                        <div class="col-sm-12">
+                                            {% if not poll.open %}<span class="glyphicon glyphicon-lock"></span>{% endif %}
+                                            <input type="{{ poll.type ? 'checkbox' : 'radio'  }}" name="answer[]" value="{{ answer.id }}" id="{{ answer.id }}"  {% if yesno == 1 %}checked{% endif %}/>
+                                            <label for="{{ answer.id }}" >{{ answer.label }}</label>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                {% if poll.open %}
+                                    <br>
+                                    <input type="submit" value="speichern" class="btn btn-primary">
+                                {% endif %}
+                            </div>
+                            </form>
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane" id="allanswers">
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                            {% for answer in answers %}
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="heading{{ answer.id }}">
+
+                                        <div class="row voffset3">
+                                            <div class="col-sm-12 viewlabel"> <span class="badge success">{{ answer.votesForVote(1)|length }}</span> {{ answer.label }}</div>
+
+                                        </div>
+
+                                    </div>
+                                    <div role="tabpanel" aria-labelledby="heading{{ answer.id }}">
+                                        <div class="panel-body">
+
+                                                    {% for vote in answer.votesForVote(1) %}
+                                                        {{ vote.user.username }}{% if loop.index < answer.votesForVote(1)|length  %},{% endif %}
+                                                    {% endfor %}
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% set obj = poll %}
+                {% include 'comment/view.html.twig' %}
+            </div>
+        </div>
+
+
+
+
+{% endblock %}
+
+{% block footscripts %}
+{{ parent() }}
+<script type="text/javascript">
+    $('#myTabs a').click(function (e) {
+                e.preventDefault()
+            $(this).tab('show')
+    });
+
+</script>
+{% endblock %}

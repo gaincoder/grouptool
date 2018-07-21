@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+{% block content_row %}
+    <div class="container container-fluid" id="home">
+        <!-- HOME -->
+
+        <!-- ABOUT & UPDATES -->
+        <div class="row-fluid" id="about">
+            {{ form_start(form) }}
+            <div class="span12">
+                <h2 class="page-title" id="scroll_up"> {{ page_title }}</h2>
+                {{ form_widget(form) }}
+            </div>
+            <button type="submit" class="btn btn-success" name="_submit">speichern</button>
+            <a href="{{ path('info') }}" class="btn btn-default" name="_submit">zurück</a>
+            {{ form_end(form) }}
+        </div>
+
+
+    </div>
+{% endblock %}

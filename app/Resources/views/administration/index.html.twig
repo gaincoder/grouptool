@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+{% block content_row %}
+    <div class="container container-fluid" id="home">
+        <!-- HOME -->
+
+        <!-- ABOUT & UPDATES -->
+        <div class="row-fluid" id="about">
+            <div class="span12">
+                <h2 class="page-title" id="scroll_up"> Administration</h2>
+                <table class="table table-striped">
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.username }}</span></td>
+                        <td>{{ user.telegramUsername }}</span></td>
+                        <td>{{ user.telegramChatId }}</span></td>
+                        <td>{% if user.enabled %}<span class="alert-success">aktiviert{% else %}<span class="alert-danger">deaktiviert{% endif %}</span> <a href="{{ path('administration_toggle_user',{user:user.id}) }}" class="btn btn-default">ändern</a></td>
+                        <td><a class="btn btn-default" href="{{ path('administration_toggle_stammi',{user:user.id}) }}">Stammi {{ user.hasRole('ROLE_STAMMI') ? 'entfernen' : 'setzen' }} </a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
+
+        </div>
+
+
+    </div>
+{% endblock %}

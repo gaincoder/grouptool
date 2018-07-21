@@ -1,0 +1,24 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% block form_top %}
+    <h3>Registrieren</h3>
+    <p><small><strong>Info:</strong> Nach der Registrierung muss diese erst durch einen Admin freigeschaltet werden!</small></p>
+{% endblock %}
+
+
+{% block fos_user_content %}
+    {% include "@FOSUser/Registration/register_content.html.twig" %}
+{% endblock fos_user_content %}
+
+{% block bottom %}
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3 social-login">
+            <p>... oder:</p>
+            <div class="social-login-buttons">
+                <a class="btn btn-md btn-success btn" href="{{ path('fos_user_security_login') }}">
+                    Jetzt einloggen!
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

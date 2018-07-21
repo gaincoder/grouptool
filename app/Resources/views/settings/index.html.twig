@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+{% block content_row %}
+    <div class="container container-fluid" id="home">
+        <!-- HOME -->
+
+        <!-- ABOUT & UPDATES -->
+        <div class="row-fluid" id="about">
+            {{ form_start(form) }}
+            <div class="span12">
+                <h2 class="page-title" id="scroll_up">Einstellungen</h2>
+                <b>Tipp:</b> Deinen Telegram Nickname findest du in Telegram unter "Einstellungen". Nach einer Änderung bitte eine private Nachricht an den Bot schicken.<br><br>
+                <div class="form-group">
+                    <label class="control-label" for="viewonlysername">Portal Benutzername</label><br>
+                    <span style="margin-left: 10px" id="viewonlysername">{{ app.user.username }}</span>
+                </div>
+                    {{ form_widget(form) }}
+            </div>
+                <button type="submit" class="btn btn-success" name="_submit">speichern</button>
+                {{ form_end(form) }}
+               
+
+
+        </div>
+
+
+    </div>
+{% endblock %}

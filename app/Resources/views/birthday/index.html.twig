@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+{% block content_row %}
+    <div class="container container-fluid" id="home">
+        <!-- HOME -->
+
+        <!-- ABOUT & UPDATES -->
+        <div class="row-fluid" id="about">
+            <div class="span12">
+                <h2 class="page-title" id="scroll_up"> Geburtstage</h2>
+                <a href="{{ path('birthday_create') }}" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus"></span> hinzufügen</a>
+                <h3>Dieses Jahr</h3>
+                <table class="table table-striped">
+                    {% for birthday in futureBirthdays %}
+                    <tr>
+                        <td>{{ birthday.birthdate|date('d.m.Y') }} <span class="badge {% if birthday.nextBirthdayIsRound %}success{% endif %}">{{ birthday.nextAge }}</span></td>
+                        <td>{{ birthday.name }}</td>
+                        <td><a href="{{ path('birthday_edit',{birthday:birthday.id}) }}" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-pencil"></span></a> <a href="{{ path('birthday_delete',{birthday:birthday.id}) }}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-trash"></span></a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <h3>Nächstes Jahr</h3>
+                <table class="table table-striped">
+                    {% for birthday in pastBirthdays %}
+                        <tr>
+                            <td>{{ birthday.birthdate|date('d.m.Y') }} <span class="badge {% if birthday.nextBirthdayIsRound %}success{% endif %}">{{ birthday.nextAge }}</span></td>
+                            <td>{{ birthday.name }}</td>
+                            <td><a href="{{ path('birthday_edit',{birthday:birthday.id}) }}" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-pencil"></span></a> <a href="{{ path('birthday_delete',{birthday:birthday.id}) }}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-trash"></span></a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+        </div>
+
+
+    </div>
+{% endblock %}
