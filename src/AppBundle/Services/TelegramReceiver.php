@@ -136,7 +136,7 @@ class TelegramReceiver
                     $user = $userRepo->findOneBy(['telegramUsername'=>$message->message->chat->username]);
                     if($user instanceof UserInterface)
                     {
-                        $this->answerBot->getBot()->answerCallbackQuery($message->callback_query->id,"Benutzer gefunden!".$data->action);
+                        $this->answerBot->getBot()->answerCallbackQuery($message->callback_query->id,"Benutzer gefunden!".$data->action,true);
                     }else{
                         $this->answerBot->getBot()->answerCallbackQuery($message->callback_query->id,"Benutzer nicht gefunden!");
                     }
