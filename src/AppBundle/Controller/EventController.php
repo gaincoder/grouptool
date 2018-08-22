@@ -166,18 +166,12 @@ class EventController extends Controller
 
     protected function getKeyboard(event $event)
     {
-        $jsonData = new \stdClass();
-        $jsonData->action = "AnswerEvent";
-        $jsonData->data = new \stdClass();
-        $jsonData->data->eventId = $event->id;
-        $jsonData->data->answer = 1;
-        $yes = json_encode($jsonData);
+        $answerString = 'AnswerEvent;'.$event->id.';';
+        $yes = $answerString.'1';
         $yesBtn = ["text"=>'Dabei','callback_data'=>$yes];
-        $jsonData->data->answer = 2;
-        $no = json_encode($jsonData);
+        $no =  $answerString.'2';
         $noBtn =["text"=>'Nein','callback_data'=>$no];
-        $jsonData->data->answer = 3;
-        $impulse = json_encode($jsonData);
+        $impulse =  $answerString.'3';
 
         $btns = [[$yesBtn],[$noBtn]];
 

@@ -130,8 +130,14 @@ class TelegramReceiver
                     $newUpdate->message = $message->callback_query->message->reply_to_message;
                     $this->processMessage(json_encode($newUpdate));
                 }
-                $data = json_decode($message->callback_query->data);
-                if(isset($data->action)){
+                $dataRaw = explode(';',$message->callback_query->data);
+
+                if(count($dataRaw) == 3){
+                    $data = new \stdClass();
+                    $data->action = $dataRaw[0];
+                    $data->data = new \stdClass();
+                    $data->data->eventId = $dataRaw[1];
+                    $data->data->answer = $dataRaw[2];
                     $userRepo = $this->entityManager->getRepository('AppBundle:User');
                     $user = $userRepo->findOneBy(['telegramUsername'=>$message->callback_query->from->username]);
                     if($user instanceof UserInterface)
