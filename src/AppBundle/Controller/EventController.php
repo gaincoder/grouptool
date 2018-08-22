@@ -178,10 +178,10 @@ class EventController extends Controller
         $impulse = json_encode($jsonData);
 
         $rows = array();
-        $rows[] = array("text"=>'Dabei','callback_data'=>$yes);
-        $rows[] = array("text"=>'Nein','callback_data'=>$no);
+        $rows[] = array(array("text"=>'Dabei','callback_data'=>$yes));
+        $rows[] = array(array("text"=>'Nein','callback_data'=>$no));
         if($event->disableImpulse != true){
-            $rows[] = array("text"=>'Spontan','callback_data'=>$impulse);
+            $rows[] = array(array("text"=>'Spontan','callback_data'=>$impulse));
         }
         return new InlineKeyboardMarkup($rows);
 
