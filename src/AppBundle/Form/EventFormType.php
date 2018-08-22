@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use FOS\UserBundle\Util\LegacyFormHelper;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -26,7 +27,9 @@ class EventFormType extends AbstractType {
             ->add('date', DateTimeType::class, array('label' =>false,'required'=>true,'date_widget' => 'single_text',
                 'attr'=>['placeholder'=>'Datum'],'choice_translation_domain'=>true))
             ->add('name', null, array('label' =>false,'required'=>true, 'attr'=>['placeholder'=>'Name']))
-            ->add('location', null, array('label' =>false,'required'=>false, 'attr'=>['placeholder'=>'Ort']));
+            ->add('location', null, array('label' =>false,'required'=>false, 'attr'=>['placeholder'=>'Ort']))
+            ->add('disableImpulse', CheckboxType::class, array('label' =>'Spontan abschalten','required'=>false))
+            ->add('public', CheckboxType::class, array('label' =>'Öffentlich','required'=>false));
 
         if($this->checker->isGranted('ROLE_STAMMI')) {
             $builder

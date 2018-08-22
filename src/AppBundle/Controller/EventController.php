@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\Request;
+use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 class EventController extends Controller
 {
@@ -57,7 +58,7 @@ class EventController extends Controller
                 $url = $router->generate('event_view', ['event' => $event->id], Router::ABSOLUTE_URL);
                 $message = ":info: <b>Neue Veranstaltung von ".$this->getUser()->getUsername()." hinzugefügt:</b> \n\n";
                 $message .= '<a href=\'' . $url . '\'>' . $event->name . "</a> am " . $event->date->format('d.m.y') . "\n";
-                $telegramBot->sendMessage($message);
+                $telegramBot->sendMessage($message,null,$this->getKeyboard($event));
             }
             $this->addFlash('success', 'Veranstaltung wurde gespeichert!');
             return $this->redirectToRoute('event');
@@ -155,12 +156,35 @@ class EventController extends Controller
             $url = $this->get('router')->generate('event_view', ['event'=>$event->id], Router::ABSOLUTE_URL);
             $message = ":info: <b>".$this->getUser()->getUsername()." möchte auf folgende Veranstaltung hinweisen:</b> \n\n";
             $message .= '<a href=\'' . $url . '\'>'.$event->name . '</a>';
-            $telegramBot->sendMessage($message);
+            $telegramBot->sendMessage($message,null,$this->getKeyboard($event));
             $this->addFlash('success', 'Veranstaltung wurde geteilt!');
         }else {
             $this->addFlash('danger', 'Teilen nicht möglich! Sichtbarkeit ist eingeschränkt!');
         }
         return $this->redirectToRoute('event_view',['event'=>$event->id]);
+    }
+
+    protected function getKeyboard(event $event)
+    {
+        $jsonData = new \stdClass();
+        $jsonData->action = "AnswerEvent";
+        $jsonData->data = new \stdClass();
+        $jsonData->data->eventId = $event->id;
+        $jsonData->data->answer = 1;
+        $yes = json_encode($jsonData);
+        $jsonData->data->answer = 2;
+        $no = json_encode($jsonData);
+        $jsonData->data->answer = 3;
+        $impulse = json_encode($jsonData);
+
+        $rows = array();
+        $rows[] = array("text"=>'Dabei','callback_data'=>$yes);
+        $rows[] = array("text"=>'Nein','callback_data'=>$no);
+        if($event->disableImpulse != true){
+            $rows[] = array("text"=>'Spontan','callback_data'=>$impulse);
+        }
+        return new InlineKeyboardMarkup($rows);
+
     }
 
 

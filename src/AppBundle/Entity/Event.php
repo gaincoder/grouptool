@@ -99,6 +99,15 @@ class Event
      */
     public $owner;
 
+    /**
+     * @ORM\Column(type="boolean",nullable=true)
+     */
+    public $disableImpulse;
+
+    /**
+     * @ORM\Column(type="boolean",nullable=true)
+     */
+    public $public;
 
     public function __construct()
     {
