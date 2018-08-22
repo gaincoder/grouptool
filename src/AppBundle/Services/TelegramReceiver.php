@@ -133,10 +133,11 @@ class TelegramReceiver
                 $data = json_decode($message->callback_query->data);
                 if(isset($data->action)){
                     $userRepo = $this->entityManager->getRepository('AppBundle:User');
-                    $user = $userRepo->findOneBy(['telegramUsername'=>$message->message->chat->username]);
+                    $user = $userRepo->findOneBy(['telegramUsername'=>$message->callback_query->from->id]);
                     if($user instanceof UserInterface)
                     {
-                        $this->answerBot->getBot()->answerCallbackQuery($message->callback_query->id,"Benutzer nicht gefunden!\n\n Bitte Telegram Benutzernamen im Portal speichern und dem Bot eine private Nachricht schreiben.",true);
+                        $data->data->callbackId = $message->callback_query->id;
+                        $this->routeToBotController($data,$user);
                     }else{
                         $this->answerBot->getBot()->answerCallbackQuery($message->callback_query->id,"Benutzer nicht gefunden!\n\n Bitte Telegram Benutzernamen im Portal speichern und dem Bot eine private Nachricht schreiben.",true);
                     }
@@ -179,6 +180,19 @@ class TelegramReceiver
         if(class_exists($class)){
             $bot = new TelegramBot($this->answerBot->getBotId(), $message->message->chat->id);
             $obj = new $class($bot,$this->entityManager,$this->router);
+            return $obj;
+        }
+        return false;
+    }
+
+    private function routeToBotController($data,$user,$chatId)
+    {
+        $ns = 'AppBundle\\BotController\\';
+        $class = $ns.ucfirst($data->action);
+        if(class_exists($class)){
+            $bot = new TelegramBot($this->answerBot->getBotId(), $chatId);
+            $obj = new $class($bot,$this->entityManager,$this->router,$data->data,$user);
+            $obj->execute();
             return $obj;
         }
         return false;

@@ -38,6 +38,10 @@ class Test implements CommandInterface
     {
         $jsonData = new \stdClass();
         $jsonData->action = "yooo";
+        $jsonData->data = new \stdClass();
+        $jsonData->data->id = 123;
+        $jsonData->data->answer = 'yes';
+
         $button = ["text"=>'foo','callback_data'=>'baaaar'];
         $button2 = ["text"=>'foo2','callback_data'=>json_encode($jsonData)];
         $button3 = ["text"=>'foo3','callback_data'=>'nummer drei'];
