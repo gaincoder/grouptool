@@ -37,7 +37,7 @@ class Test implements CommandInterface
     public function execute($message)
     {
         $button = ["text"=>'foo','callback_data'=>'baaaar'];
-        $inlineKeyBoard = new InlineKeyboardMarkup([$button]);
+        $inlineKeyBoard = new InlineKeyboardMarkup([[$button]]);
         $this->answerBot->sendMessage("dies ist ein test",null,$inlineKeyBoard);
     }
 
