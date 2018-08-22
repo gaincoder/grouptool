@@ -130,6 +130,17 @@ class TelegramReceiver
                     $newUpdate->message = $message->callback_query->message->reply_to_message;
                     $this->processMessage(json_encode($newUpdate));
                 }
+                $data = json_decode($message->callback_query->data);
+                if(isset($data->action)){
+                    $userRepo = $this->entityManager->getRepository('AppBundle:User');
+                    $user = $userRepo->findOneBy(['telegramUsername'=>$message->message->chat->username]);
+                    if($user instanceof UserInterface)
+                    {
+                        $this->answerBot->getBot()->answerCallbackQuery($message->callback_query->id,"Benutzer gefunden!".$data->action);
+                    }else{
+                        $this->answerBot->getBot()->answerCallbackQuery($message->callback_query->id,"Benutzer nicht gefunden!");
+                    }
+                }
             }
             return false;
         }
