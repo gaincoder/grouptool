@@ -177,7 +177,7 @@ class EventController extends Controller
 
         if($event->disableImpulse != true){
             $impulseBtn = ["text"=>'Spontan','callback_data'=>$impulse];
-            $btns[0][] = $impulseBtn;
+            $btns[] = $impulseBtn;
         }
         return new InlineKeyboardMarkup($btns);
 
