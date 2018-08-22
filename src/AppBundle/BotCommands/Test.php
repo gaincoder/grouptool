@@ -13,6 +13,7 @@ use AppBundle\Services\TelegramBot;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Routing\Router;
+use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 /**
  * Class Hallo
@@ -35,13 +36,9 @@ class Test implements CommandInterface
 
     public function execute($message)
     {
-        $answer = "Folgende Befehle kenne ich:\n\n";
-        $answer .= "/hilfe\nZeigt diese Liste an\n\n";
-        $answer .= "/veranstaltungen\nZeigt die nächsten Veranstaltungen\n\n";
-        $answer .= "/geburtstage\nGeburtstagsliste\n\n";
-        $answer .= "/portal\nLink zum Gruppenportal\n\n";
-        $answer .= "/fotos -Name des Albums-\nFotos hochladen";
-        $this->answerBot->sendMessage($answer);
+        $button = ["text"=>'foo','callback_data'=>'baaaar'];
+        $inlineKeyBoard = new InlineKeyboardMarkup([$button]);
+        $this->answerBot->sendMessage("dies ist ein test",null,$inlineKeyBoard);
     }
 
 
