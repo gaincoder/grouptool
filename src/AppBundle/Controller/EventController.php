@@ -172,18 +172,20 @@ class EventController extends Controller
         $jsonData->data->eventId = $event->id;
         $jsonData->data->answer = 1;
         $yes = json_encode($jsonData);
+        $yesBtn = ["text"=>'Dabei','callback_data'=>$yes];
         $jsonData->data->answer = 2;
         $no = json_encode($jsonData);
+        $noBtn =["text"=>'Nein','callback_data'=>$no];
         $jsonData->data->answer = 3;
         $impulse = json_encode($jsonData);
 
-        $rows = array();
-        $rows[] = array(array("text"=>'Dabei','callback_data'=>$yes));
-        $rows[] = array(array("text"=>'Nein','callback_data'=>$no));
+        $btns = [[$yesBtn],[$noBtn]];
+
         if($event->disableImpulse != true){
-            $rows[] = array(array("text"=>'Spontan','callback_data'=>$impulse));
+            $impulseBtn = ["text"=>'Spontan','callback_data'=>$impulse];
+            $btns[0][] = $impulseBtn;
         }
-        return new InlineKeyboardMarkup($rows);
+        return new InlineKeyboardMarkup($btns);
 
     }
 
