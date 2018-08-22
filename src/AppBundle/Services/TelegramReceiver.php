@@ -136,9 +136,9 @@ class TelegramReceiver
                     $user = $userRepo->findOneBy(['telegramUsername'=>$message->message->chat->username]);
                     if($user instanceof UserInterface)
                     {
-                        $this->answerBot->getBot()->answerCallbackQuery($message->callback_query->id,"Benutzer gefunden!".$data->action,true);
+                        $this->answerBot->getBot()->answerCallbackQuery($message->callback_query->id,"Benutzer nicht gefunden!\n\n Bitte Telegram Benutzernamen im Portal speichern und dem Bot eine private Nachricht schreiben.",true);
                     }else{
-                        $this->answerBot->getBot()->answerCallbackQuery($message->callback_query->id,"Benutzer nicht gefunden!");
+                        $this->answerBot->getBot()->answerCallbackQuery($message->callback_query->id,"Benutzer nicht gefunden!\n\n Bitte Telegram Benutzernamen im Portal speichern und dem Bot eine private Nachricht schreiben.",true);
                     }
                 }
             }
