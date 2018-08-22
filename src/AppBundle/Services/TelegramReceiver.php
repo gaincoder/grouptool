@@ -116,7 +116,7 @@ class TelegramReceiver
             }
         }else{
             if($this->isCallback($message)){
-                $this->removeKeyBoard($message->callback_query->message);
+                //$this->removeKeyBoard($message->callback_query->message);
                 if($message->callback_query->data == 'no'){
                     $this->answerBot->sendMessage('Vorgang abgebrochen!');
                 }
