@@ -133,13 +133,13 @@ class TelegramReceiver
                 $data = json_decode($message->callback_query->data);
                 if(isset($data->action)){
                     $userRepo = $this->entityManager->getRepository('AppBundle:User');
-                    $user = $userRepo->findOneBy(['telegramUsername'=>$message->callback_query->from->id]);
+                    $user = $userRepo->findOneBy(['telegramUsername'=>$message->callback_query->from->username]);
                     if($user instanceof UserInterface)
                     {
                         $data->data->callbackId = $message->callback_query->id;
                         $this->routeToBotController($data,$user);
                     }else{
-                        $this->answerBot->getBot()->answerCallbackQuery($message->callback_query->id,"Benutzer nicht gefunden!\n\n Bitte Telegram Benutzernamen im Portal speichern und dem Bot eine private Nachricht schreiben.",true);
+                        $this->answerBot->getBot()->answerCallbackQuery($message->callback_query->id,"Benutzer nicht gefunden!\n\nBitte Telegram Benutzernamen im Portal speichern und dem Bot eine private Nachricht schreiben.",true);
                     }
                 }
             }
