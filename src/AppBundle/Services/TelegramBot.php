@@ -18,17 +18,18 @@ class TelegramBot
     protected $botId;
     public $chatId;
 
-    public function __construct($botId,$chatId)
+    public function __construct($botId, $chatId)
     {
         $this->bot = new \TelegramBot\Api\BotApi($botId);
         $this->botId = $botId;
         $this->chatId = $chatId;
     }
 
-    public function sendMessage($message)
+    public function sendMessage($message, $replyToMessageId = null,
+                                $replyMarkup = null)
     {
         $message = $this->parseEmoji($message);
-        $this->bot->sendMessage($this->chatId,$message,'HTML',true);
+        $this->bot->sendMessage($this->chatId, $message, 'HTML', true, $replyToMessageId, $replyMarkup);
     }
 
     /**
@@ -57,9 +58,8 @@ class TelegramBot
             'question' => "\xE2\x9D\x93",
             'wink' => "\xF0\x9F\x91\x8B",
         ];
-        foreach ($emojiMap as $emojiName => $emojiCode)
-        {
-            $string = str_replace(':'.$emojiName.':',$emojiCode,$string);
+        foreach ($emojiMap as $emojiName => $emojiCode) {
+            $string = str_replace(':' . $emojiName . ':', $emojiCode, $string);
         }
         return $string;
     }
