@@ -137,7 +137,7 @@ class TelegramReceiver
                     if($user instanceof UserInterface)
                     {
                         $data->data->callbackId = $message->callback_query->id;
-                        $this->routeToBotController($data,$user);
+                        $this->routeToBotController($data,$user,$message->callback_query->id);
                     }else{
                         $this->answerBot->getBot()->answerCallbackQuery($message->callback_query->id,"Benutzer nicht gefunden!\n\nBitte Telegram Benutzernamen im Portal speichern und dem Bot eine private Nachricht schreiben.",true);
                     }
