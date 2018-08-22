@@ -57,6 +57,8 @@ class TelegramBot
             'info' => "\xE2\x84\xB9",
             'question' => "\xE2\x9D\x93",
             'wink' => "\xF0\x9F\x91\x8B",
+            'earth' => "\xF0\x9F\x8C\x8F",
+            'lock' => "\xF0\x9F\x94\x92",
         ];
         foreach ($emojiMap as $emojiName => $emojiCode) {
             $string = str_replace(':' . $emojiName . ':', $emojiCode, $string);

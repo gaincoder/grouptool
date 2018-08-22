@@ -86,7 +86,8 @@ class CronjobController extends Controller
             foreach ($events as $event){
                 $url = $router->generate('event_view',['event'=>$event->id],Router::ABSOLUTE_URL);
                 $message.= $event->date->format('d.m.').' ';
-                $message.= '<a href=\''.$url.'\'>'.$event->name."</a>\n";
+                $icon = $event->public ? ':earth:' : ':lock:';
+                $message.= $icon.' <a href=\''.$url.'\'>'.$event->name."</a>\n";
             }
             $telegramBot->sendMessage($message);
         }
