@@ -32,6 +32,8 @@ class TelegramReceiver
 
     public function processMessage($message)
     {
+        $dir = dirname(__FILE__).'/../../../var/logs';
+        file_put_contents($dir.'/input.log',$message."\n",FILE_APPEND);
         $message = json_decode($message);
         if($this->isText($message)){
             $message->message->text = str_replace('@lg_portal_bot','',$message->message->text);
