@@ -139,7 +139,7 @@ class TelegramReceiver
                     $data->data->eventId = $dataRaw[1];
                     $data->data->answer = $dataRaw[2];
                     $userRepo = $this->entityManager->getRepository('AppBundle:User');
-                    $user = $userRepo->findOneBy(['telegramUsername'=>$message->callback_query->from->username]);
+                    $user = $userRepo->findOneBy(['telegramChatId'=>$message->callback_query->from->id]);
                     if($user instanceof UserInterface)
                     {
                         $data->data->callbackId = $message->callback_query->id;
