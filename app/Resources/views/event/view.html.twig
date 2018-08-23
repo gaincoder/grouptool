@@ -58,11 +58,11 @@
                 </div>
                 <div class="row voffset3">
                     <div class="col-sm-2 viewlabel">Spontan abschalten:</div>
-                    <div class="col-sm-10">{{ event.public ? 'Ja' : 'Nein'  }}</div>
+                    <div class="col-sm-10">{{ event.disableImpulse ? 'Ja' : 'Nein'  }}</div>
                 </div>
                 <div class="row voffset3">
                     <div class="col-sm-2 viewlabel">Öffentlich:</div>
-                    <div class="col-sm-10">{{ event.disableImpulse ? 'Ja' : 'Nein'  }}</div>
+                    <div class="col-sm-10">{{ event.public ? 'Ja' : 'Nein'  }}</div>
                 </div>
                 {% if event.updated is defined and event.updated.timestamp > 100 %}
                     <br><br><small>Letzte Änderung von {{ event.updatedBy }} am {{ event.updated|date('d.m.y') }} um {{ event.updated|date('H:i') }}</small>
