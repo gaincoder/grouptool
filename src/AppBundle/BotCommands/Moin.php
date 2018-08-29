@@ -35,7 +35,7 @@ class Moin implements CommandInterface
 
     public function execute($message)
     {
-        $answer = "huhu :wink:";
+        $answer = "Moinsen digga :wink:";
         $this->answerBot->sendMessage($answer);
     }
 }

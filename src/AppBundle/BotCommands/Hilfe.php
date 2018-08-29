@@ -38,6 +38,7 @@ class Hilfe implements CommandInterface
         $answer = "Folgende Befehle kenne ich:\n\n";
         $answer .= "/hilfe\nZeigt diese Liste an\n\n";
         $answer .= "/veranstaltungen\nZeigt die nächsten Veranstaltungen\n\n";
+        $answer .= "/gruppenveranstaltungen\nZeigt die nächsten Veranstaltungen der Gruppe\n\n";
         $answer .= "/geburtstage\nGeburtstagsliste\n\n";
         $answer .= "/portal\nLink zum Gruppenportal\n\n";
         $answer .= "/fotos -Name des Albums-\nFotos hochladen";
