@@ -27,7 +27,7 @@ class AutoLinkTwigExtension extends \Twig_Extension
     {
         $text = preg_replace(
             '#((https?|ftp)://(\S*?\.\S*?))([\s)\[\]{},;"\':<]|\.\s|$)#i',
-            "<a href=\"$1\" target=\"_blank\">$1</a>$4",
+            "<a href=\"$1\" target=\"_blank\">__LINK__</a>$4",
             $string
         );
 
@@ -35,8 +35,9 @@ class AutoLinkTwigExtension extends \Twig_Extension
             $dom = new \DOMDocument('1.0','UTF-8');
             $text = $html_src = '<html><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"></head><body>'.$text;
             $dom->loadHTML($text);
+            /** @var \DOMNode $node */
             foreach ($dom->getElementsByTagName('a') as $node) {
-                $inner = $node->nodeValue;
+                $inner = $node->attributes->getNamedItem('href')->nodeValue;
                 if (strlen($inner) > 35) {
                     $inner = substr($inner, 0, 30) . '...' . substr($inner, strlen($inner) - 5, 5);
                 }
