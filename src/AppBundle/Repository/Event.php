@@ -62,4 +62,25 @@ class Event extends EntityRepository
         return $query->getQuery()->execute();
 
     }
+
+
+    /**
+     * @return \AppBundle\Entity\Event[]
+     */
+    public function findNextFiveForGroup($permission=0)
+    {
+        $query = $this->createQueryBuilder('e')
+            ->where('e.date >= NOW()')
+            ->andWhere('e.public = 0');
+        if($permission < 1) {
+            $query
+                ->andWhere('e.permission = 0');
+        }
+        $query
+            ->orderBy('e.date')
+            ->setMaxResults(5);
+        return $query->getQuery()->execute();
+
+    }
+
 }

@@ -33,7 +33,7 @@ class Gruppenveranstaltungen implements CommandInterface
 
     public function execute($message)
     {
-        $events = $this->entityManager->getRepository('AppBundle:Event')->findNextFive();
+        $events = $this->entityManager->getRepository('AppBundle:Event')->findNextFiveForGroup();
         $telegramBot = $this->answerBot;
         $message = ":info::calendar: <b>Kommende Gruppen-Veranstaltungen:</b>\n\n";
         $router = $this->router;
