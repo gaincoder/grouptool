@@ -33,7 +33,7 @@ class Veranstaltungen implements CommandInterface
 
     public function execute($message)
     {
-        $events = $this->entityManager->getRepository('AppBundle:Event')->findNextThree();
+        $events = $this->entityManager->getRepository('AppBundle:Event')->findNextFive();
         $telegramBot = $this->answerBot;
         $message = ":info::calendar: <b>Kommende Veranstaltungen:</b>\n\n";
         $router = $this->router;
