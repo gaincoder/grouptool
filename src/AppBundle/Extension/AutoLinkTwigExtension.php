@@ -25,6 +25,7 @@ class AutoLinkTwigExtension extends \Twig_Extension
 
     static public function auto_link_text($string)
     {
+        $string = htmlentities($string);
         $text = preg_replace(
             '#((https?|ftp)://(\S*?\.\S*?))([\s)\[\]{},;"\':<]|\.\s|$)#i',
             "<a href=\"$1\" target=\"_blank\">__LINK__</a>$4",
