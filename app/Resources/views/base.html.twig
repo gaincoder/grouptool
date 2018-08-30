@@ -34,7 +34,8 @@
             <script type="text/javascript" src="/js/jquery.mobile.custom.min.js"></script>
             '
         {% endblock head_script %}
-
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js">
         <title>{% block title %}Gruppenportal Lipper Gruppe{% endblock title %}</title>
         {% block favicon %}<link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />{% endblock %}
         {% block head_bottom %}
@@ -144,7 +145,11 @@
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-
+        <script>
+            $(document).ready(function() {
+                $('.summernote').summernote();
+            });
+        </script>
 {% endblock foot_script %}
 {% endblock body %}
 

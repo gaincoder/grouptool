@@ -42,7 +42,7 @@ class EventFormType extends AbstractType {
                 ]);
         }
         $builder
-            ->add('info', TextareaType::class, array('label' =>false,'required'=>false,'attr'=>['placeholder'=>'Info','rows'=>15]))
+            ->add('info', TextareaType::class, array('label' =>false,'required'=>false,'attr'=>['class'=>'summernote','placeholder'=>'Info','rows'=>15]))
         ;
     }
 
