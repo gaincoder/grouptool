@@ -141,6 +141,10 @@
                     <div class="col-sm-2 viewlabel">Antworten hinzufügen:</div>
                     <div class="col-sm-10">{{ poll.allowAdd ? 'Ja' : 'Nein'}}</div>
                 </div>
+                <div class="row voffset3">
+                    <div class="col-sm-2 viewlabel">Info:</div>
+                    <div class="col-sm-10">{{ (poll.info ~ " ")|raw }}</div>
+                </div>
                 {% if poll.updated is defined and poll.updated.timestamp > 100 %}
                     <br><br><small>Letzte Änderung von {{ poll.updatedBy }} am {{ poll.updated|date('d.m.y') }} um {{ poll.updated|date('H:i') }}</small>
                 {% endif %}

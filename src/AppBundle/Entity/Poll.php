@@ -109,6 +109,11 @@ class Poll
      */
     public $updatedBy;
 
+    /**
+     * @ORM\Column(type="text",nullable=true)
+     */
+    public $info;
+
 
     public function __construct()
     {

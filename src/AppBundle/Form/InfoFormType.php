@@ -40,7 +40,7 @@ class InfoFormType extends AbstractType {
                 ->add('important', CheckboxType::class, array('label' =>'anpinnen','required'=>false));
         }
         $builder
-            ->add('text', TextareaType::class, array('label' =>false, 'attr'=>['placeholder'=>'Text','rows'=>15]))
+            ->add('text', TextareaType::class, array('label' =>false, 'attr'=>['class'=>'summernote','placeholder'=>'Text','rows'=>15]))
         ;
     }
 

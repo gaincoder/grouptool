@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
@@ -55,12 +56,16 @@ class PollFormType extends AbstractType
                 ]);
         }
         $builder
+            ->add('info', TextareaType::class, array('label' =>false,'required'=>false,'attr'=>['class'=>'summernote','placeholder'=>'Info','rows'=>15]))
+        ;
+        $builder
             ->add('answers',CollectionType::class,[
                 'entry_type' => PollAnswerFormType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
             ]);
+
     }
 
     /**

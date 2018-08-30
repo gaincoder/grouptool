@@ -15,6 +15,7 @@
                 {% if form.permission is defined %}
                     {{ form_row(form.permission) }}
                 {% endif %}
+                {{ form_row(form.info) }}
                 <h3 class="page-title" id="scroll_up"> Antwortmöglichkeiten</h3>
                 <div id="answer-fields-list"
                     data-prototype="{{ form_widget(form.answers.vars.prototype)|e }}">

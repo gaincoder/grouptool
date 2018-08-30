@@ -16,7 +16,7 @@
                             <a href="{{ path('info_share',{info:info.id}) }}" class="btn btn-sm btn-default">
                                 <span class="glyphicon glyphicon-share-alt"></span> Telegram
                             </a></td></h3>
-                        {{ info.text|nl2br|auto_link_text }}
+                        {{ info.text|raw }}
                             {% if info.updated is defined and info.updated.timestamp > 100 %}
                             <br><br><small>Letzte Änderung von {{ info.updatedBy }} am {{ info.updated|date('d.m.y') }} um {{ info.updated|date('H:i') }}</small>
                             {% endif %}
