@@ -105,6 +105,12 @@ class Event
     public $disableImpulse;
 
     /**
+     * @ORM\Column(type="integer",nullable=true)
+     */
+    public $maxPersons = 0;
+
+
+    /**
      * @ORM\Column(type="boolean",nullable=true)
      */
     public $public;

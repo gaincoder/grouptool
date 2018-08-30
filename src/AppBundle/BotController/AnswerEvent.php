@@ -48,17 +48,31 @@ class AnswerEvent implements BotControllerInterface
         $this->entityManager->flush();
         $this->answerBot->getBot()->answerCallbackQuery($this->data->callbackId,'Antwort wurde gespeichert!');
 
+        $answerText = $this->voteToText($answer->vote);
 
         if($event->owner instanceof UserInterface && $event->owner->telegramSupported()){
             $telegramBot = $this->answerBot;
             $url = $this->router->generate('event_view', ['event'=>$event->id], Router::ABSOLUTE_URL);
             $message = $this->user->getUsername()." hat bei deiner Veranstaltung ";
             $message .= '<a href=\'' . $url . '\'>'.$event->name . '</a>';
-            $message .= ' seine Teilnahmeinformationen geändert.';
+            $message .= ' seine/ihre Teilnahmeinformationen auf \"'.$answerText.'\" geändert.';
             $oldChatId = $telegramBot->chatId;
             $telegramBot->chatId = $event->owner->telegramChatId;
             $telegramBot->sendMessage($message);
             $telegramBot->chatId = $oldChatId;
+        }
+    }
+
+    protected function voteToText($vote)
+    {
+        switch ((int)$vote) {
+            case 1:
+                return "dabei";
+            case 2:
+                return "nein";
+            case 3:
+                return "spontan";
+
         }
     }
 }

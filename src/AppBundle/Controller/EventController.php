@@ -203,13 +203,16 @@ class EventController extends Controller
             $em->persist($answer);
             $em->flush();
             $this->addFlash('success','Antwort wurde gespeichert!');
+
+            $answerText = $this->voteToText($answer->vote);
+
             if($event->owner instanceof UserInterface && $event->owner->telegramSupported()){
                 $telegramBot = $this->get('app.telegram.bot');
                 $router = $this->get('router');
                 $url = $router->generate('event_view', ['event'=>$event->id], Router::ABSOLUTE_URL);
                 $message = $this->getUser()->getUsername()." hat bei deiner Veranstaltung ";
                 $message .= '<a href=\'' . $url . '\'>'.$event->name . '</a>';
-                $message .= ' seine Teilnahmeinformationen geändert.';
+                $message .= ' seine/ihre Teilnahmeinformationen auf \"'.$answerText.'\" geändert.';
                 $telegramBot->chatId = $event->owner->telegramChatId;
                 $telegramBot->sendMessage($message);
             }
@@ -217,4 +220,16 @@ class EventController extends Controller
         return $this->redirectToRoute('event_view',['event'=>$event->id]);
     }
 
+    protected function voteToText($vote)
+    {
+        switch ((int)$vote) {
+            case 1:
+                return "dabei";
+            case 2:
+                return "nein";
+            case 3:
+                return "spontan";
+
+        }
+    }
 }
