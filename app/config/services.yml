@@ -44,30 +44,11 @@ services:
         tags:
           - { name: twig.extension }
 
-    app.telegram.bot:
-        class: AppBundle\Services\TelegramBot
+    app.http_api:
+        class: AppBundle\Services\HttpApi
         public: true
-        arguments: ['%bot_id%','%chat_id%']
+        arguments: ['%http_api_url%','%http_api_key%']
 
-    app.telegram.adminbot:
-        class: AppBundle\Services\TelegramBot
-        public: true
-        arguments: ['%bot_id%','%admin_chat_id%']
-
-    app.telegram.updatebot:
-        class: AppBundle\Services\TelegramBot
-        public: true
-        arguments: ['445436422:AAGihz08aEGGc4H6ISPmdJWnRaE1Hm1iwyM','%admin_chat_id%']
-
-    app.telegram.photoupload:
-        class: AppBundle\Services\PhotoUpload
-        public: true
-        arguments: ['@app.telegram.adminbot', '@doctrine.orm.entity_manager']
-
-    app.telegram.receiver:
-        class: AppBundle\Services\TelegramReceiver
-        public: true
-        arguments: ['@app.telegram.adminbot', '@doctrine.orm.entity_manager', '@router.default','@app.telegram.photoupload']
 
 
     gedmo.listener.softdeleteable:

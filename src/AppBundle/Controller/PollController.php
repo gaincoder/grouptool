@@ -54,11 +54,11 @@ class PollController extends Controller
             $em->flush();
 
             if($poll->permission == 0) {
-                $telegramBot = $this->get('app.telegram.bot');
-
-                $message = ":info: <b>Neue Umfrage von ".$this->getUser()->getUsername()." hinzugefügt:</b> \n\n";
-                $message .= '<a href=\'' . $url . '\'>'.$poll->name . '</a>';
-                $telegramBot->sendMessage($message);
+                $api = $this->get('app.http_api');
+                $data = new \stdClass();
+                $data->user = $this->getUser()->toStdClass();
+                $data->poll = $poll->toStdClass();
+                $api->post('/pollCreated',json_encode($data));
             }
 
             $this->addFlash('success', 'Umfrage wurde gespeichert!');
@@ -130,16 +130,16 @@ class PollController extends Controller
             $poll->comments[] = $comment;
             $em->persist($poll);
             $em->flush();
-            if($poll->owner->telegramSupported()){
-                $telegramBot = $this->get('app.telegram.bot');
-                $router = $this->get('router');
-                $url = $router->generate('poll_view', ['poll'=>$poll->id], Router::ABSOLUTE_URL);
-                $message = $this->getUser()->getUsername()." hat deine Umfrage ";
-                $message .= '<a href=\'' . $url . '\'>'.$poll->name . '</a>';
-                $message .= ' kommentiert.';
-                $telegramBot->chatId = $poll->owner->telegramChatId;
-                $telegramBot->sendMessage($message);
-            }
+//            if($poll->owner->telegramSupported()){
+//                $telegramBot = $this->get('app.telegram.bot');
+//                $router = $this->get('router');
+//                $url = $router->generate('poll_view', ['poll'=>$poll->id], Router::ABSOLUTE_URL);
+//                $message = $this->getUser()->getUsername()." hat deine Umfrage ";
+//                $message .= '<a href=\'' . $url . '\'>'.$poll->name . '</a>';
+//                $message .= ' kommentiert.';
+//                $telegramBot->chatId = $poll->owner->telegramChatId;
+//                $telegramBot->sendMessage($message);
+//            }
             return $this->redirectToRoute('poll_view', ['poll' => $poll->id]);
         }
 
@@ -178,16 +178,16 @@ class PollController extends Controller
             }
             $em->flush();
             $this->addFlash('success','Antworten wurden gespeichert!');
-            if($poll->owner->telegramSupported()){
-                $telegramBot = $this->get('app.telegram.bot');
-                $router = $this->get('router');
-                $url = $router->generate('poll_view', ['poll'=>$poll->id], Router::ABSOLUTE_URL);
-                $message = "Deine Umfrage ";
-                $message .= '<a href=\'' . $url . '\'>'.$poll->name . '</a>';
-                $message .= ' wurde von '.$this->getUser()->getUsername().' beantwortet.';
-                $telegramBot->chatId = $poll->owner->telegramChatId;
-                $telegramBot->sendMessage($message);
-            }
+//            if($poll->owner->telegramSupported()){
+//                $telegramBot = $this->get('app.telegram.bot');
+//                $router = $this->get('router');
+//                $url = $router->generate('poll_view', ['poll'=>$poll->id], Router::ABSOLUTE_URL);
+//                $message = "Deine Umfrage ";
+//                $message .= '<a href=\'' . $url . '\'>'.$poll->name . '</a>';
+//                $message .= ' wurde von '.$this->getUser()->getUsername().' beantwortet.';
+//                $telegramBot->chatId = $poll->owner->telegramChatId;
+//                $telegramBot->sendMessage($message);
+//            }
         }
         return $this->redirectToRoute('poll_view',['poll'=>$poll->id]);
 
@@ -216,12 +216,11 @@ class PollController extends Controller
     public function share(Poll $poll, Request $request)
     {
         if($poll->permission == 0) {
-            $telegramBot = $this->get('app.telegram.bot');
-            $url = $this->get('router')->generate('poll_view', ['poll'=>$poll->id], Router::ABSOLUTE_URL);
-            $message = ":info: <b>".$this->getUser()->getUsername()." möchte auf folgende Umfrage hinweisen:</b> \n\n";
-            $message .= '<a href=\'' . $url . '\'>'.$poll->name . '</a>';
-            $telegramBot->sendMessage($message);
-            $this->addFlash('success', 'Umfrage wurde geteilt!');
+            $api = $this->get('app.http_api');
+            $data = new \stdClass();
+            $data->user = $this->getUser()->toStdClass();
+            $data->poll = $poll->toStdClass();
+            $api->post('/pollCreated',json_encode($data));
         }else {
             $this->addFlash('danger', 'Teilen nicht möglich! Sichtbarkeit ist eingeschränkt!');
         }

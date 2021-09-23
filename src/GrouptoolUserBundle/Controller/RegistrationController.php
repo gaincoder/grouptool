@@ -59,7 +59,7 @@ class RegistrationController extends \FOS\UserBundle\Controller\RegistrationCont
                 $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
 
                 $userManager->updateUser($user);
-                $this->get('app.telegram.adminbot')->sendMessage("Neuer Benutzer registriert: ".$user->getUsername());
+//                $this->get('app.telegram.adminbot')->sendMessage("Neuer Benutzer registriert: ".$user->getUsername());
 
                 if (null === $response = $event->getResponse()) {
                     $url = $this->generateUrl('homepage');

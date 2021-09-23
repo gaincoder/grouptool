@@ -50,14 +50,14 @@ class PhotoController extends Controller
                 .$url.'">'.$photoalbum->name.'</a> ',$photoalbum->permission);
             $em->persist($news);
             $em->flush();
-            if($photoalbum->permission == 0) {
-                $telegramBot = $this->get('app.telegram.bot');
-                $router = $this->get('router');
-                $url = $router->generate('photoalbum_view', ['photoalbum' => $photoalbum->id], Router::ABSOLUTE_URL);
-                $message = ":info: <b>Neues Fotoalbum von ".$this->getUser()->getUsername()." hinzugefügt:</b> \n\n";
-                $message .= '<a href=\'' . $url . '\'>' . $photoalbum->name . "</a>\n";
-                $telegramBot->sendMessage($message);
-            }
+//            if($photoalbum->permission == 0) {
+//                $telegramBot = $this->get('app.telegram.bot');
+//                $router = $this->get('router');
+//                $url = $router->generate('photoalbum_view', ['photoalbum' => $photoalbum->id], Router::ABSOLUTE_URL);
+//                $message = ":info: <b>Neues Fotoalbum von ".$this->getUser()->getUsername()." hinzugefügt:</b> \n\n";
+//                $message .= '<a href=\'' . $url . '\'>' . $photoalbum->name . "</a>\n";
+//                $telegramBot->sendMessage($message);
+//            }
             $this->addFlash('success', 'Fotoalbum wurde gespeichert!');
             return $this->redirectToRoute('photoalbum');
         }

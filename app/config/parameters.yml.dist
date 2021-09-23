@@ -17,8 +17,10 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt
-    bot_id: '439735189:AAHHg6-CONNI4AdQjckxTlEfHnilH28TvAE'
-    chat_id: '-230818886'
-    admin_chat_id: '29439698'
     router.request_context.host: lippe.birgit-moritz.de
     router.request_context.scheme: https
+
+    http_api_url: "http://127.0.0.1:8088"
+    http_api_key: "xx"
+
+

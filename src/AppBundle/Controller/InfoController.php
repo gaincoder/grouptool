@@ -50,11 +50,11 @@ class InfoController extends Controller
             $em->flush();
 
             if($info->permission == 0) {
-                $telegramBot = $this->get('app.telegram.bot');
-
-                $message = ":info: <b>Neue Info von ".$this->getUser()->getUsername()." hinzugefügt:</b> \n\n";
-                $message .= '<a href=\'' . $url . '#'.$info->id.'\'>'.$info->headline . "</a> \n";
-                $telegramBot->sendMessage($message);
+                $api = $this->get('app.http_api');
+                $event = new \stdClass();
+                $event->user = $this->getUser()->toStdClass();
+                $event->info = $info->toStdClass();
+                $api->post('/infoCreated',json_encode($event));
             }
             
             $this->addFlash('success', 'Info wurde gespeichert!');
@@ -110,13 +110,11 @@ class InfoController extends Controller
     public function share(info $info, Request $request)
     {
         if($info->permission == 0) {
-            $telegramBot = $this->get('app.telegram.bot');
-            $url = $this->get('router')->generate('info', [], Router::ABSOLUTE_URL);
-            $message = ":info: <b>".$this->getUser()->getUsername()." möchte auf folgende Info hinweisen:</b> \n\n";
-            $message .= "<b>".$info->headline."</b>\n\n";
-            $message .= $info->text."\n\n";
-            $message .= '<a href=\'' . $url . '\'>Infos anzeigen</a>';
-            $telegramBot->sendMessage($message);
+            $api = $this->get('app.http_api');
+            $event = new \stdClass();
+            $event->user = $this->getUser()->toStdClass();
+            $event->info = $info->toStdClass();
+            $api->post('/infoShared',json_encode($event));
             $this->addFlash('success', 'Info wurde geteilt!');
         }else {
             $this->addFlash('danger', 'Teilen nicht möglich! Sichtbarkeit ist eingeschränkt!');

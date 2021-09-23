@@ -53,12 +53,11 @@ class EventController extends Controller
             $em->persist($news);
             $em->flush();
             if($event->permission == 0) {
-                $telegramBot = $this->get('app.telegram.bot');
-                $router = $this->get('router');
-                $url = $router->generate('event_view', ['event' => $event->id], Router::ABSOLUTE_URL);
-                $message = ":info: <b>Neue Veranstaltung von ".$this->getUser()->getUsername()." hinzugefügt:</b> \n\n";
-                $message .= '<a href=\'' . $url . '\'>' . $event->name . "</a> am " . $event->date->format('d.m.y') . "\n";
-                $telegramBot->sendMessage($message,null,$this->getKeyboard($event));
+                $api = $this->get('app.http_api');
+                $data = new \stdClass();
+                $data->user = $this->getUser()->toStdClass();
+                $data->event = $event->toStdClass();
+                $api->post('/eventCreated',json_encode($data));
             }
             $this->addFlash('success', 'Veranstaltung wurde gespeichert!');
             return $this->redirectToRoute('event');
@@ -123,16 +122,16 @@ class EventController extends Controller
             $event->comments[] = $comment;
             $em->persist($event);
             $em->flush();
-            if($event->owner instanceof UserInterface && $event->owner->telegramSupported()){
-                $telegramBot = $this->get('app.telegram.bot');
-                $router = $this->get('router');
-                $url = $router->generate('event_view', ['event'=>$event->id], Router::ABSOLUTE_URL);
-                $message = $this->getUser()->getUsername()." hat einen Kommmentar zu deiner Veranstaltung  ";
-                $message .= '<a href=\'' . $url . '\'>'.$event->name . '</a>';
-                $message .= ' dagelassen.';
-                $telegramBot->chatId = $event->owner->telegramChatId;
-                $telegramBot->sendMessage($message);
-            }
+//            if($event->owner instanceof UserInterface && $event->owner->telegramSupported()){
+//                $telegramBot = $this->get('app.telegram.bot');
+//                $router = $this->get('router');
+//                $url = $router->generate('event_view', ['event'=>$event->id], Router::ABSOLUTE_URL);
+//                $message = $this->getUser()->getUsername()." hat einen Kommmentar zu deiner Veranstaltung  ";
+//                $message .= '<a href=\'' . $url . '\'>'.$event->name . '</a>';
+//                $message .= ' dagelassen.';
+//                $telegramBot->chatId = $event->owner->telegramChatId;
+//                $telegramBot->sendMessage($message);
+//            }
             return $this->redirectToRoute('event_view', ['event' => $event->id]);
         }
         $voteRepo = $em->getRepository('AppBundle:EventVote');
@@ -152,12 +151,11 @@ class EventController extends Controller
     public function share(event $event, Request $request)
     {
         if($event->permission == 0) {
-            $telegramBot = $this->get('app.telegram.bot');
-            $url = $this->get('router')->generate('event_view', ['event'=>$event->id], Router::ABSOLUTE_URL);
-            $message = ":info: <b>".$this->getUser()->getUsername()." möchte auf folgende Veranstaltung hinweisen:</b> \n\n";
-            $message .= '<a href=\'' . $url . '\'>'.$event->name . '</a>';
-            $telegramBot->sendMessage($message,null,$this->getKeyboard($event));
-            $this->addFlash('success', 'Veranstaltung wurde geteilt!');
+            $api = $this->get('app.http_api');
+            $data = new \stdClass();
+            $data->user = $this->getUser()->toStdClass();
+            $data->event = $event->toStdClass();
+            $api->post('/eventShared',json_encode($data));
         }else {
             $this->addFlash('danger', 'Teilen nicht möglich! Sichtbarkeit ist eingeschränkt!');
         }
@@ -205,17 +203,17 @@ class EventController extends Controller
             $this->addFlash('success','Antwort wurde gespeichert!');
 
             $answerText = $this->voteToText($answer->vote);
-
-            if($event->owner instanceof UserInterface && $event->owner->telegramSupported()){
-                $telegramBot = $this->get('app.telegram.bot');
-                $router = $this->get('router');
-                $url = $router->generate('event_view', ['event'=>$event->id], Router::ABSOLUTE_URL);
-                $message = $this->getUser()->getUsername()." hat bei deiner Veranstaltung ";
-                $message .= '<a href=\'' . $url . '\'>'.$event->name . '</a>';
-                $message .= ' seine/ihre Teilnahmeinformationen auf "'.$answerText.'" geändert.';
-                $telegramBot->chatId = $event->owner->telegramChatId;
-                $telegramBot->sendMessage($message);
-            }
+//
+//            if($event->owner instanceof UserInterface && $event->owner->telegramSupported()){
+//                $telegramBot = $this->get('app.telegram.bot');
+//                $router = $this->get('router');
+//                $url = $router->generate('event_view', ['event'=>$event->id], Router::ABSOLUTE_URL);
+//                $message = $this->getUser()->getUsername()." hat bei deiner Veranstaltung ";
+//                $message .= '<a href=\'' . $url . '\'>'.$event->name . '</a>';
+//                $message .= ' seine/ihre Teilnahmeinformationen auf "'.$answerText.'" geändert.';
+//                $telegramBot->chatId = $event->owner->telegramChatId;
+//                $telegramBot->sendMessage($message);
+//            }
         }
         return $this->redirectToRoute('event_view',['event'=>$event->id]);
     }

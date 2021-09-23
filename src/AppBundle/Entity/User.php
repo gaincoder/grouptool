@@ -67,4 +67,14 @@ class User extends BaseUser
         }
     }
 
+
+    public function toStdClass()
+    {
+        $obj = new \stdClass();
+        $obj->name = $this->getUsername();
+        return $obj;
+    }
+
+
+
 }

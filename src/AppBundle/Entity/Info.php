@@ -85,4 +85,11 @@ class Info
     {
         $this->updated = new \DateTime();
     }
+
+    public function toStdClass()
+    {
+        $obj = new \stdClass();
+        $obj->headline = $this->headline;
+        return $obj;
+    }
 }
