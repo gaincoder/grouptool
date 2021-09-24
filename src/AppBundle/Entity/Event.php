@@ -129,4 +129,15 @@ class Event
     {
         $this->updated = new \DateTime();
     }
+
+    public function toStdClass()
+    {
+        $obj = new \stdClass();
+        $obj->id = $this->id;
+        $obj->name = $this->name;
+        $obj->date = $this->date->format(DATE_RFC3339);
+        $obj->location = $this->location;
+        $obj->public = $this->public;
+        return $obj;
+    }
 }

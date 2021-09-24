@@ -177,4 +177,12 @@ class Poll
         return false;
     }
 
+    public function toStdClass()
+    {
+        $obj = new \stdClass();
+        $obj->id = $this->id;
+        $obj->name = $this->name;
+        return $obj;
+    }
+
 }
